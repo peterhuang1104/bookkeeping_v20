@@ -6,7 +6,7 @@
     <title>記帳系統</title>
 </head>
 <body>
-    <h1>新增記錄</h1>
+    <h1>記帳系統</h1>
 
     <form id="add-form">
         <label for="shop">選擇店鋪：</label>
@@ -33,7 +33,7 @@
     <p id="status-message"></p>
 
     <h2>查看記錄</h2>
-    <a href="/read">查看所有記錄</a>
+    <a href="read.html">查看所有記錄</a>
 
     <script>
         document.getElementById("add-form").addEventListener("submit", function(event) {
@@ -41,8 +41,8 @@
 
             const formData = new FormData(event.target);
 
-            // 發送新增記錄的請求
-            fetch("/add", {
+            // 發送新增記錄的請求到後端 API
+            fetch("https://your-flask-backend-url/add", {
                 method: "POST",
                 body: formData
             })
