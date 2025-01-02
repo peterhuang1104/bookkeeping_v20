@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ month }} 記錄</title>
+</head>
+<body>
+    <h1>{{ month }} 記錄</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>日期</th>
+                <th>機台名稱</th>
+                <th>金額</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.date }}</td>
+                <td>{{ record.machine }}</td>
+                <td>{{ record.amount }}</td>
+                <td>
+                    <button class="delete-btn" 
+                            data-date="{{ record.date }}" 
+                            data-machine="{{ record.machine }}" 
+                            data-amount="{{ record.amount }}">
+                        刪除
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/">返回主頁</a>
+
+    <script>
+        // 刪除記錄功能
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                const formData = new FormData();
+                formData.append("month", "{{ month }}");
+                formData.append("date", this.dataset.date);
+                formData.append("machine", this.dataset.machine);
+                formData.append("amount", this.dataset.amount);
+
+                fetch("/delete", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("記錄已刪除");
+                        location.reload(); // 重新加載頁面
+                    } else {
+                        alert("刪除失敗：" + data.message);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

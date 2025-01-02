@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記帳系統</title>
+</head>
+<body>
+    <h1>新增記錄</h1>
+
+    <form id="add-form">
+        <label for="shop">選擇店鋪：</label>
+        <select name="shop" id="shop">
+            <option value="A店">A店</option>
+            <option value="B店">B店</option>
+        </select><br><br>
+
+        <label for="machine">選擇機台：</label>
+        <select name="machine" id="machine">
+            <option value="機台1">機台1</option>
+            <option value="機台2">機台2</option>
+        </select><br><br>
+
+        <label for="amount">輸入金額：</label>
+        <input type="number" name="amount" id="amount" required><br><br>
+
+        <label for="date">選擇日期（可選）：</label>
+        <input type="date" name="date" id="date"><br><br>
+
+        <button type="submit">新增</button>
+    </form>
+
+    <p id="status-message"></p>
+
+    <h2>查看記錄</h2>
+    <a href="/read">查看所有記錄</a>
+
+    <script>
+        document.getElementById("add-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // 阻止表單提交的默認行為
+
+            const formData = new FormData(event.target);
+
+            // 發送新增記錄的請求
+            fetch("/add", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    document.getElementById("status-message").innerText = "記錄新增成功！";
+                } else {
+                    document.getElementById("status-message").innerText = "新增記錄失敗：" + data.message;
+                }
+            })
+            .catch(error => {
+                document.getElementById("status-message").innerText = "請求失敗：" + error;
+            });
+        });
+    </script>
+</body>
+</html>
+

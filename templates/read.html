@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看記錄</title>
+</head>
+<body>
+    <h1>查看所有記錄</h1>
+
+    {% for month, shops in records_by_month.items() %}
+    <h2>{{ month }}</h2>
+    {% for shop, records in shops.items() %}
+    <h3>{{ shop }}</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>日期</th>
+                <th>機台</th>
+                <th>金額</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record[0] }}</td>
+                <td>{{ record[1] }}</td>
+                <td>{{ record[2] }}</td>
+                <td>
+                    <form method="POST" action="/delete" style="display:inline;">
+                        <input type="hidden" name="month" value="{{ month }}">
+                        <input type="hidden" name="shop" value="{{ shop }}">
+                        <input type="hidden" name="index" value="{{ loop.index0 }}">
+                        <button type="submit">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>總金額：{{ totals_by_month[month][shop] }}</p>
+    {% endfor %}
+    {% endfor %}
+
+    <a href="/">返回新增頁面</a>
+</body>
+</html>
+
